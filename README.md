@@ -20,3 +20,5 @@ Consumo : W = VI
 
 2) You must have a file called local_credentials.py in this directory, which defines the string TOKEN (containing your Telegram Bot token)
 
+## Wot no ... ?
+The profile photo of Ohm bot is, of course, [Chad](https://en.wikipedia.org/wiki/Kilroy_was_here). 
