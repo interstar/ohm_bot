@@ -1,10 +1,11 @@
 import telebot
 
-from id import TOKEN
+from local_credentials import TOKEN
 
 bot = telebot.TeleBot(TOKEN)
 
 @bot.message_handler(commands=['start'])
+
 def start(message):
     bot.reply_to(message, "Oi!")
 
