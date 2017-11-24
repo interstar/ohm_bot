@@ -1,5 +1,17 @@
 import telebot
 
+
+class Transcript :
+
+	def __init__(self,fName) :
+		self.f = open(fName,"a")
+	
+	def write(self,message) :
+		self.f.write("%s\n"%message.text)
+		self.f.flush()
+	
+TXT = Transcript("transcript.txt")
+		
 from local_credentials import TOKEN
 
 bot = telebot.TeleBot(TOKEN)
@@ -17,7 +29,7 @@ Consumo : W = VI
 /I@ohm_bot V R -> calcular amperagem baseada V e R
 /R@ohm_bot V I -> calcular resistence baseada V e I
 /W@ohm_bot I V -> calcular consumo baseada voltagem e amperagem
-/A@ohm_bot V W -> calcular amperes baseada voltagem e consumo
+/A@ohm_bot W V -> calcular amperes baseada voltagem e consumo
 """)
 
 def isNum(x) :
@@ -28,11 +40,11 @@ def isNum(x) :
         return False
 
 def nums(s) :
-    print s
     return [float(x) for x in s.split(" ")[1:] if isNum(x)]
 
 def error(f) :
     def g(message) :
+        TXT.write(message)
         try :
             f(message)
         except Exception, e:
@@ -62,7 +74,7 @@ def calcR(message):
 @error
 def calcA(message) :
     items = nums(message.text)
-    bot.reply_to(message,"%s amps" % (items[1]/items[0]))
+    bot.reply_to(message,"%s amps" % (items[0]/items[1]))
 
 @bot.message_handler(commands=['W'])
 @error
@@ -71,8 +83,13 @@ def calcW(message) :
     bot.reply_to(message,"%s watts" % (items[0]*items[1]))
 
 
-@bot.message_handler(func=lambda m: True)
-def echo_all(message):
-    bot.reply_to(message, message.text)
 
+
+@bot.message_handler(func=lambda message: True)
+@error
+def echo_all(message):
+    #print message.text
+    #bot.reply_to(message, message.text)
+    pass
+	
 bot.polling()
